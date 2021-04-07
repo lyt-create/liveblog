@@ -1,0 +1,37 @@
+{#author:lytcreate#}
+{#blog:liveblog#}
+{#website:http://www.liveblog.cn#}
+{#powered by Django#}
+
+{% extends 'base.html' %}
+{% block live1 %}<title>梦途-LiveBlog官网-极简主义个人博客系统-Powered by Liveblog</title>{% endblock %}
+{% block live2 %}
+<div style="min-height: 1028px">
+{% if request.user.id == 1 %}
+<div class="motus-lz"><a href="writemotus.html"><i class="layui-icon">&#xe642;</i>立志</a></div>
+{% endif %}
+{% for g in curuent_page %}
+<div class="motus-side">
+<div class="motus-title"><b>目标：</b><label>{{ g.theme }} &nbsp;{% if request.user.id == 1 %}<a href="editmotus.html?nid={{ g.id }}"><span class="layui-badge layui-bg-orange" title="重新立个flag">编辑</span></a>{% endif %}</label></div>
+<div class="motus-time"><b>愿期：</b><label>{{ g.successdate }}</label></div>
+    {% if g.state == '进行中' %}
+<div class="motus-state"><b>状态：</b><label><span class="layui-badge layui-bg-blue">进行中</span></label>&nbsp;&nbsp;{% if request.user.id == 1 %}<a href="motussuccess.html?nid={{ g.id }}"><span class="layui-badge" title="目标已完成！">&#10003</span></a>{% endif %}</div>
+    {% else %}
+    <div class="motus-state"><b>状态：</b><label><span class="layui-badge layui-bg-orange">已完成</span></label>&nbsp;&nbsp;{% if request.user.id == 1 %}<a href="delmotus.html?nid={{ g.id }}"><span class="layui-badge" title="你真的要放弃这个目标嘛？">&#10007</span></a>{% endif %}</div>
+    {% endif %}
+<div class="motus-content"><b>内容：</b><br><label>{{ g.contents|safe}}</label></div>
+</div>
+<hr class="motus-hr"><br><br>
+{% endfor %}
+
+<div>
+    {% if curuent_page.has_previous %}
+        <div class="home_bottom_left"><a href="?page={{ curuent_page.previous_page_number }}">上一页</a></div>
+    {% endif %}
+    {% if curuent_page.has_next %}
+        <div class="home_bottom"><a href="?page={{ curuent_page.next_page_number }}">下一页</a></div>
+    {% endif %}
+    </div>
+    <div class="home_bottom_bottom"></div>
+</div>
+{% endblock %}

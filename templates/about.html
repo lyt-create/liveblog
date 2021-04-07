@@ -1,0 +1,23 @@
+{#author:lytcreate#}
+{#blog:liveblog#}
+{#website:http://www.liveblog.cn#}
+{#powered by Django#}
+
+{% extends 'base.html' %}
+{% block live1 %}<title>关于Liveblog-LiveBlog官网-轻奢主义个人博客系统-Powered by Liveblog</title>{% endblock %}
+
+{% block live2 %}
+<div style="min-height: 1028px">
+<div class="about_head">
+    {{ about.0 }}
+</div>
+    {% if request.user.id == 1 %}
+    <div class="about_gx"> <a href="updateabout.html" style="color: darkgrey">更新</a></div>
+    {% endif %}
+<div class="about_content">
+    {{ about.1|safe }}<br><br><br>
+</div>
+<div class="about_bottom">{{ admin.0 }}发布于{{ about.2 }}</div>
+</div>
+<div class="home_bottom_bottom"></div>
+{% endblock %}

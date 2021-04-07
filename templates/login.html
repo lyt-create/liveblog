@@ -1,0 +1,28 @@
+{#author:lytcreate#}
+{#blog:liveblog#}
+{#website:http://www.liveblog.cn#}
+{#powered by Django#}
+
+<html>
+<head>
+<link rel="stylesheet" href="../static/css/style.css">
+    {% load static %}
+    <link rel="shortcut icon" href="{%static "../static/images/favicon.ico" %}"/>
+<title>登陆-LiveBlog官网-极简主义个人博客系统</title>
+</head>
+<body class='mainbody'>
+<form method="post">{% csrf_token %}
+    <input type="text" name="next" value="{{ next }}" hidden="hidden">
+<div class="login_content">
+    <div class="login_welcome">Welcome</div>
+    <div class="login_user">username:</div>
+    <div class="login_name"><input type="text" name="username"></div>
+    <div class="login_user">password:</div>
+    <div class="login_name"><input type="password" name="password"></div>
+    <div class="login_tishi">{{ tishi }}</div>
+    <div class="login_su"><button type="submit" class="login_sub">Sign in</button></div>
+</div>
+    </form>
+<div class="lfooter">LiveBlog - <label>人生若只如初见</label></div>
+</body>
+</html>

@@ -1,0 +1,192 @@
+{#author:lytcreate#}
+{#blog:liveblog#}
+{#website:http://www.liveblog.cn#}
+{#powered by Django#}
+
+{% extends 'base.html' %}
+{% block live1 %}<title>{{ daily_list.2 }}-LiveBlog官网-极简主义个人博客系统-Powered by Liveblog</title>
+
+{% endblock %}
+{% block live3 %}
+<div class="read_pic">
+    <div class="read_title">
+        {{ daily_list.2 }}
+        {% if request.user.id == 1 %}
+        &nbsp;<a href="editdaily.html?nid={{ daily_list.0 }}"><span class="layui-badge layui-bg-orange">编辑</span></a>&nbsp;<a href="deldaily.html?nid={{ daily_list.0 }}"><span class="layui-badge">删除</span></a>
+        {% endif %}
+    </div>
+</div>
+{##个人日志飞机蓝色&#9812，时间&#9770，浏览&#10052橙色，喜欢心型红色&#10084，评论三叶草绿色&#9752#}
+<div class="read_title_li">
+    <label class="read_title_li1">&#9812 个人日志</label>&nbsp;&nbsp;&nbsp;&nbsp;
+    <label class="read_title_li2">&#9770 {{ daily_list.7 }}</label>&nbsp;&nbsp;&nbsp;&nbsp;
+    <label class="read_title_li3">&#10052 {{ daily_list.4 }}</label>&nbsp;&nbsp;&nbsp;&nbsp;
+    <label class="read_title_li4">&#10084 {{ daily_list.6 }}</label>&nbsp;&nbsp;&nbsp;&nbsp;
+    <label class="read_title_li5">&#9752 {{ daily_list.5 }}</label>&nbsp;&nbsp;&nbsp;&nbsp;
+</div>
+{#    正文#}
+<div class="read_content">
+    {{ daily_list.3|safe }}
+
+</div>
+{#    作者专利说明#}
+<div class="read_writer">
+本文作者：{{ person.6 }} <br>
+本文仅代表作者个人观点，转载请注明来源。
+</div>
+{#    喜欢#}
+<div class="read_like">
+<div class="read_like1"></div>
+<div class="read_likes"><img src="../static/images/like.png">
+</div>
+
+</div>
+{#    上下篇#}
+<div class="read_up_down">
+<div class="read_up">
+    {% if up == '没有上一篇了' %}
+上一篇：<a href="#">{{ up }}</a>
+    {% else %}
+    上一篇：<a href="daily.html?read={{ ups }}">{{ up }}</a>
+    {% endif %}
+</div>
+<div class="read_down">
+     {% if down == '没有下一篇了' %}
+下一篇：<a href="#">{{ down }}</a>
+    {% else %}
+    下一篇：<a href="daily.html?read={{ downs }}">{{ down }}</a>
+    {% endif %}
+</div>
+</div>
+{#评论区#}
+    <form method="post"  action="daily.html">{% csrf_token %}
+<div class="read_comments"><input type="text" value="{{ daily_list.0 }}" hidden="hidden" name="did" class="likes">
+<label>#&nbsp;</label>评论区
+</div>
+<div class="read_name">
+<div class="read_nicheng">
+    昵称<label>*</label>
+</div>
+    <div class="read_emails">
+    E-mail<label>*</label>
+</div>
+</div>
+<div class="read_input">
+<div class="read_nichenginput">
+<input placeholder="NAME" name="name" type="text" required="required">
+</div>
+<div class="read_emailinput">
+<input placeholder="E-mail" name="mail" type="text" required="required">
+</div>
+</div>
+<br>
+{#<div class="read_email">#}
+{##}
+
+{#</div>#}
+<div class="read_comment">
+<textarea id="read" name="comments"></textarea>
+</div>
+<div class="read_button">
+<button type="submit">发表</button>
+</div>
+</form>
+
+{% for com in com_list %}
+{#    具体评论信息#}
+<div class="read_pl">
+{#单个评论信息#}
+<div>
+{#    头像，昵称，时间#}
+    <div>
+        <div class="read_headimage"><img src="../static/headimages/{{ com.pic }}.png"></div>
+        <div class="read_nickname">{{ com.username}}</div>
+        <div class="read_time">{{ com.publicationdate }}</div>
+    </div>
+{#    评论内容#}
+    {% if com.dadname == '0' %}
+    <div class="read_plnr">{{ com.content|safe }}&nbsp;&nbsp;<span class="layui-badge layui-bg-orange" id="reply" style="cursor: pointer;">回复</span></div>
+    {% else %}
+    <div class="read_plnr"><label style="color: orange">@{{ com.dadname }}:</label>{{ com.content|safe }}&nbsp;&nbsp;<span  id="reply" class="layui-bg-orange" style="cursor: pointer;">回复</span></div>
+    {% endif %}
+    <form method="post" action="publishcomments.html">{% csrf_token %}<input name="articleid" type="text" hidden="hidden" value="{{ com.articleid }}">
+        <input type="text" name="dadid" hidden="hidden" value="{{ com.id }}"><input type="text" value="{{ com.username }}" name="dadname" hidden="hidden">
+
+        <div id="edit" class="read_comment1">
+            <div class="read_comment3">
+            <div class="read_nichenginput1"><input name="uname" placeholder="NAME" required="required"></div>
+            <div class="read_emailinput1"><input name="uemail" placeholder="E-mail" required="required"></div>
+            </div><br>
+            <textarea id="read1" name="ucomments" class="read_textarea"></textarea><br>
+            <div class="read_comment2"><button class="replay1" type="button">取消</button> &nbsp;&nbsp;<button type="submit" onclick="fun2()">回复</button></div>
+        </div>
+    </form>
+</div>
+{#    分割线#}
+</div>
+<hr class="read_hr">
+{% endfor %}
+
+
+<div class="home_bottom_bottom"></div>
+
+<script type="text/javascript">
+    layui.use('layedit', function(){
+    var layedit = layui.layedit;
+    layedit.build('read', {
+        height: 140, //设置编辑器高度
+        tool: ['face']
+});
+    layui.use('code', function(){ //加载code模块
+    layui.code({
+        elem: 'pre',
+        title:' ',
+        about:false,
+    }); //引用code方法
+                });
+var textarea = document.getElementsByClassName("read_textarea");
+for (var i = 0; i < textarea.length; i++) {
+    textarea[i].id = "read"+(i+1);
+    var layedit1 = layui.layedit;
+    layedit1.build(textarea[i].id, {
+            height: 140, //设置编辑器高度
+            tool: ['face']
+        });
+}
+});
+</script>
+
+<script type="text/javascript" src="../static/js/jquery.min.js"></script>
+<script type="text/javascript">
+$(function(){
+	$(".layui-bg-orange").click(function(event){
+		$(this).closest(".read_pl").find(".read_comment1").show();
+	});
+	$(".replay1").click(function(event){
+		$(this).closest(".read_pl").find(".read_comment1").hide();
+	});
+});
+</script>
+<script>
+    $(document).ready(function () {
+        $('.read_likes').click(function () {
+            $(".read_like1").text("+1");
+            setTimeout(function(){
+                $(".read_like1").text("");
+        },1000);
+
+        $.ajax({
+            url:/dailylikes/,
+            type:'GET',
+            data:{
+                'id':$('.likes').val()
+            },
+            success:function (data) {
+
+                $('.read_title_li4').html('&#10084 '+data)
+            }
+        })
+        })
+    })
+</script>
+{% endblock %}

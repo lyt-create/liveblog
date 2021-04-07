@@ -1,0 +1,94 @@
+{#author:lytcreate#}
+{#blog:liveblog#}
+{#website:http://www.liveblog.cn#}
+{#powered by Django#}
+
+{% extends 'base.html' %}
+{% block live1 %}<title>发布日志-LiveBlog官网-极简主义个人博客系统-Powered by Liveblog</title>{% endblock %}
+{% block live2 %}
+    <form method="post" enctype="multipart/form-data">{% csrf_token%}
+        <input name="id" type="text" value="{{ edit_list.0 }}" hidden="hidden">
+    <div class="publist_title">
+        <input type="text" name="title" lay-verify="title" autocomplete="off" placeholder="标题" class="layui-input" value="{{ edit_list.1 }}" required="required">
+    </div>
+        {% if edit_list.0 %}
+        <div class="publish_ypic">原封面：<input type="text" name="ypic" value="{{ edit_list.3 }}"></div>
+        <div class="publish_pic">封面图：<input type="file" name="pic"></div>
+        {% else %}
+        <div class="publish_pic">封面图：<input type="file" name="pic" required="required"></div>
+        {% endif %}
+
+        <div class="publish_file"> <button type="button"  id="files"><i class="layui-icon" title="上传附件">&#xe62f;</i></button></div>
+
+        <div class="publish_content"><textarea id="live" name="content"  lay-verify="cont">{{ edit_list.2 }}</textarea></div>
+    <div class="publish_submit"><button type="submit" class="layui-btn layui-btn-warm">发布</button></div>
+    </form>
+    <div class="home_bottom_bottom"></div>
+
+<script>
+    layui.use(['layedit','upload','layer','form'], function(){
+    var layedit = layui.layedit
+        ,upload = layui.upload
+        ,$ = layui.jquery
+        ,layer = layui.layer
+        ,form = layui.form;
+
+    layedit.set({
+        uploadImage: {
+        url: 'upload/' //接口url
+        ,type: 'POST' //默认post
+  }
+});
+    index = layedit.build('live',{
+        height:620,
+        tool:['strong' //加粗
+      ,'italic' //斜体
+     ,'underline' //下划线
+      ,'del' //删除线
+
+     ,'|' //分割线
+
+      ,'left' //左对齐
+     ,'center' //居中对齐
+     ,'right' //右对齐
+     ,'link' //超链接
+     ,'unlink' //清除链接
+      ,'face' //表情
+     ,'image' //插入图片
+     ,'code']  //插入代码
+
+  });
+
+        upload.render({
+        elem:'#files',
+        url:'filesupload/',
+        size:102400,
+        method:'POST',
+        accept:'file',
+        exts:'exe|zip|7z|rar|py|ppt|pptx|doc|docx|xls|xlsx|txt|js|pdf|PDF',
+        done:function (res) {
+            s = res['title']
+            u = res['data']['src']
+            layer.msg(res['msg'])
+            form.verify({
+                cont: function () {
+                    layedit.sync(index)
+                }
+            });
+            c = layedit.getContent(index)
+            {#alert(u)#}
+            layedit.setContent(index,c+'<a href="media/{{ MEDIA_URL }}'+u+'" download>'+'<i class="layui-icon" style="color: orange">&#xe601;</i>'+s+'</a>')
+
+
+        },
+        err: function () {
+            layer.msg('上传未成功，请稍后再试噢！')
+        }
+    });
+
+
+
+});
+
+</script>
+{% endblock %}

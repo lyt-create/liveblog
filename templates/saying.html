@@ -1,0 +1,78 @@
+{#author:lytcreate#}
+{#blog:liveblog#}
+{#website:http://www.liveblog.cn#}
+{#powered by Django#}
+
+{% extends 'base.html' %}
+{% block live1 %}<title>说说-LiveBlog官网-极简主义个人博客系统-Powered by Liveblog</title>{% endblock %}
+{% block live2 %}
+<div style="min-height: 1200px">
+<div class="saying-edit">
+    <form method="post" action="">{%csrf_token%}
+    <input type="text" name="id" hidden="hidden" value="{{ say.0 }}">
+    <div ><textarea id="live" name="contents">{{ say.1 }}</textarea></div><br>
+    <div class="saying-other">
+        {% if request.user.id == 1 %}
+        <div class="saying-submit"><input type="submit" value="发表"></div>
+        {% else %}
+        <div class="saying-submit"><a href="login.html?next=saying.html"><input type="button" value="发表"></a></div>
+        {% endif %}
+    </div>
+    </form><br>
+</div>
+{% for say in curuent_page %}
+<div class="saying-body">
+    <input type="text" value="{{ say.id }}" class="sayid" hidden="hidden">
+    <div class="saying-t"><p class="saying-time">{{ say.publicationdate }}</p></div>
+    <hr class="saying-hr">
+    <div class="saying-say">{{ say.contents|safe }}{% if request.user.id == 1 %} &nbsp;<a href="editsaying.html?nid={{ say.id }}"><span class="layui-badge layui-bg-orange">编辑</span></a>&nbsp;<a href="delsaying.html?nid={{ say.id }}"><span class="layui-badge">删除</span></a>{% endif %}</div>
+    <div class="saying-zan">
+    <div class="saying-z"><div class="saying-za" id="{{ say.id }}" data-text="{{ say.id }}"><img src="../static/images/like.png"></div></div>
+    <div class="saying-zanshu" id="like{{ say.id }}">{{ say.likesnumber }}</div>
+    </div><div class="home_bottom_bottom"></div>
+</div>
+    {% endfor %}
+
+    <div>
+    {% if curuent_page.has_previous %}
+        <div class="home_bottom_left"><a href="?page={{ curuent_page.previous_page_number }}">上一页</a></div>
+    {% endif %}
+    {% if curuent_page.has_next %}
+        <div class="home_bottom"><a href="?page={{ curuent_page.next_page_number }}">下一页</a></div>
+    {% endif %}
+    </div>
+    <div class="home_bottom_bottom"></div>
+    <br>
+</div>
+<script type="text/javascript">
+        if ( {{ err }} == 1 ){
+            alert('Liveblog提示：\n\n 您没有发表心情，没法记录下来~');
+        }
+</script>
+<script>
+    layui.use('layedit', function(){
+    var layedit = layui.layedit;
+    layedit.build('live', {
+        height: 180, //设置编辑器高度
+        tool: ['face']
+});
+});
+</script>
+<script>
+
+    $('.saying-za').click(function () {       {# 点击的时候就必须确定下来id是多少,class还影响者样式，这里用id去判断比较好，id是不同的 #}
+        var ids = ($(this).attr('id'));
+        $.ajax({
+            url:/updatesaylike/,
+            type:'POST',
+            data:{
+                'id':ids
+            },
+            success:function (data){
+                var lk = eval('('+data+')');
+                $('#like'+lk.id).text(lk.likes)
+            }
+        })
+    })
+</script>
+{% endblock %}

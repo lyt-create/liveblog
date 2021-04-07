@@ -1,0 +1,98 @@
+{#author:lytcreate#}
+{#blog:liveblog#}
+{#website:http://www.liveblog.cn#}
+{#powered by Django#}
+
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html"
+      xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <link rel="shortcut icon" href="{%static "../static/images/favicon.ico" %}"/>
+
+    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" href="../static/css/layui.css"  media="all">
+    <script src="/static/js/layui.js" charset="utf-8"></script>
+    <script src="/static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../static/js/time.js"></script>
+    {% block live1 %}<title>LiveblogBase</title>{% endblock %}
+</head>
+<body class="mainbody">
+
+{#顶部菜单栏：首页，日志，相册，梦途，时光轴，关于，右顶搜索（点击弹出搜索框）和发布（点击直接进入发布页面）#}
+{#中间正文部分：说说，日志，相册，时光轴，归档，关于，左上角个签，右上角头像昵称，头像，说说/文章/评论数量#}
+{#以上部分全部通用头部#}
+<div class="mainmenu"></br>
+<label><a href="/home.html">首页</a></label>&nbsp;&nbsp;&nbsp;&nbsp;
+    <label><a href="/saying.html">说说</a></label>&nbsp&nbsp;&nbsp;&nbsp;&nbsp;
+    <label><a href="/album.html">相册</a></label>&nbsp;&nbsp;&nbsp;&nbsp;
+    <label><a href="/motus.html">梦途</a></label>&nbsp;&nbsp;&nbsp;&nbsp;
+    <label><a href="/timeline.html">时光轴</a></label>&nbsp;&nbsp;&nbsp;&nbsp;
+    <label><a href="/about.html">关于</a></label>
+    <label><form method="post" action="">{% csrf_token %}
+            <input type="text" name="search" placeholder="吾将上下而求索！">
+            <a><input type="button" value="" id="search"></a>
+            <label><a class="edit" href="publish.html"><input type="button" value=""></a></label>
+        </form></label>
+</div></br>
+
+{#以下是个签/资料等信息#}
+<div class="mainhtml">{% block live3 %}
+<div class="main_head">
+<div class="geqian">
+    <div class="geqian-say"><label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ person.0 }}</label></div>
+    <div class="contact">
+        <div class =contact-q>
+        <div class="contact-live"><a href="#"><img src="../static/images/wb.png /" title="{{ person.2 }}"></a></div>
+        <div class="contact-live"><a href="#"><img src="../static/images/wx.png" title="{{ person.3 }}"></a></div>
+        <div class="contact-live"><a href="http://wpa.qq.com/msgrd?v=3&uin={{ person.4 }}&site=qq&menu=yes"><img src="../static/images/QQ.png" title="QQ:{{ person.4 }}"></a></div>
+        <div class="contact-live"><a href="mailto:{{ person.5 }}"><img src="../static/images/yx.png" title="Email:{{ person.5 }}"></a></div>
+            </div>
+    </div>
+</div>
+    <div class="ziliao">
+        {% if request.user.id == 1 %}
+            <div class="touxiang"><a href="logout.html"><img src="media/{{ MEDIA_URL }}{{ person.1 }}"></a></div>
+            <div class="nicheng">{{ request.user.username }}</div>
+        {% else %}
+        <div class="touxiang"><a href="login.html"><img src="media/{{ MEDIA_URL }}{{ person.1 }}"></a></div>
+        <div class="nicheng">初见</div>
+        {% endif %}
+
+        <div class="sj">
+            <div class="shuju">
+        <div class="shujuxiang"><b>{{ dt.0 }}</b><br><label>动态</label></div>
+        <div class="shujuxiang"><b>{{ rz.0 }}</b><br><label>日志</label></div>
+        <div class="shujuxiang"><b>{{ pl.0 }}</b><br><label>评论</label></div>
+        <div class="shujuxiang"><b>{{ ll.0 }}</b><br><label>浏览</label></div>
+        <div class="shujuxiang"><b>{{ dz.0 }}</b><br><label>点赞</label></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{# 以下是中间内容：说说，日志，相册，梦途，时光轴，关于 #}
+{% block live2 %}
+
+{% endblock %}
+{% endblock %}
+</div>
+{# 以下是底部通用信息：友链·备案·版权·联系方式·加载时间·人生若只如初见 #}
+</br></br></br>
+<div class="footer">
+    <span>友链：&nbsp&nbsp {% for link in links_list %}  <label><a href="{{ link.website }}" target="_blank">{{ link.webname }}</a></label>&nbsp&nbsp&nbsp{% endfor %}   </span>{% if request.user.id == 1 %}<a href="editlinks.html"><span class="layui-badge layui-bg-orange">编辑</span></a>{% endif %}<br>
+    <span>Copyright&#169 2020-2021 &nbsp&nbsp<label><a href="https://www.djangoproject.com/">Powered by Django</a></label>&nbsp&nbsp<label id="htmer_time"></label></span><br>
+    <br>
+    <span class="rfooter">LiveBlog - <label>人生若只如初见</label></span><br><br><br><br><br>
+</div>
+<script>
+    $('#search').click(function () {
+        layui.use('layer',function () {
+            var layer = layui.layer;
+            layer.msg('搜索可能会让你忽略了细节（还在开发中啦...）')
+        })
+    })
+</script>
+</body>
+</html>

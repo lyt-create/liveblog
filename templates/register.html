@@ -1,0 +1,72 @@
+{#author:lytcreate#}
+{#blog:liveblog#}
+{#website:http://www.liveblog.cn#}
+{#powered by Django#}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>注册-LiveBlog官网-极简主义个人博客系统</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+    {% load static %}
+    <link rel="shortcut icon" href="{%static "../static/images/favicon.ico" %}"/>
+    <script type="text/javascript">
+        function yanzheng() {
+            document.registers.action ="/registers.html";
+            document.registers.submit();
+         }
+        function register() {
+            document.registers.action ="/register.html";
+            document.registers.submit();
+        }
+    </script>
+</head>
+<body class='mainbody'>
+<div class="container">
+	<div class="row clearfix">
+		<div class="col-md-12 column">
+			<form action="" class="form-horizontal" method="post" name="registers">{% csrf_token %}
+			<h3>Register</h3>
+				<div class="form-group">
+					 <label for="inputEmail3" class="col-sm control-label" >Username:</label>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" name="username" required="required" minlength="2" value="{{ username }}"/>
+					</div>
+				</div>
+				<div class="form-group">
+					 <label for="inputPassword3" class="col-sm-2 control-label">Password:</label>
+					<div class="col-sm-10">
+						<input type="password" class="form-control" id="inputPassword3" name="password" required="required" minlength="6" value="{{ password }}"/>
+					</div>
+				</div>
+                <div class="form-group">
+					 <label for="inputEmail3" class="col-sm control-label" >Email:</label>
+					<div class="col-sm-10">
+						<input type="email" class="form-control" name="email" required="required" value="{{ email }}"/>
+					</div>
+				</div>
+                <div class="form-group">
+					 <label for="inputEmail3" class="col-sm control-label" >Verification Code:&nbsp&nbsp<input type="button" class="registercode" onclick="yanzheng()" value="{{ yzm }}"></label>
+					<div class="col-sm-10">
+						<input type="email" class="form-control" name="yanzhengma"/>
+					</div>
+				</div>
+
+
+				<div class="form-group">
+                    <div class="tishi">{{ tishi }}</div><br>
+					<div class="col-sm-offset-2 col-sm-10">
+						 <input type="button" class="btn btn-success" onclick="register()" value="Register">
+						 <button type="button" onclick="window.location.href='/login.html'" class="btn btn-success">Sign in</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+
+</div>
+<div class="lfooter">LiveBlog - <label>人生若只如初见</label></div>
+
+</body>
+</html>

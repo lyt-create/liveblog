@@ -1,0 +1,37 @@
+{#author:lytcreate#}
+{#blog:liveblog#}
+{#website:http://www.liveblog.cn#}
+{#powered by Django#}
+
+{% extends 'base.html' %}
+{% block live1 %}<title>更新关于Liveblog-LiveBlog官网-极简主义个人博客系统-Powered by Liveblog</title>{% endblock %}
+
+{% block live2 %}
+<div>
+<form method="post" enctype="multipart/form-data">{% csrf_token %}
+<div class="about_head">
+    <input type="text" value="{{ about.0 }}" name="subject" class="layui-input">
+</div>
+<div class="publish_content">
+    <textarea name="content" id="about">{{ about.1 }}</textarea>
+</div>
+<div class="about_bottom"><button type="submit" class="layui-btn layui-btn-warm">更新</button></div>
+    </form>
+</div>
+<div class="home_bottom_bottom"></div>
+    <script>
+    layui.use('layedit', function(){
+    var layedit = layui.layedit;
+
+    layedit.set({
+        uploadImage: {
+        url: 'upload/' //接口url
+        ,type: 'POST' //默认post
+  }
+});
+  layedit.build('about'); //建立编辑器
+
+
+});
+</script>
+{% endblock %}

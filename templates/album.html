@@ -1,0 +1,37 @@
+{#author:lytcreate#}
+{#blog:liveblog#}
+{#website:http://www.liveblog.cn#}
+{#powered by Django#}
+
+{% extends 'base.html' %}
+{% block live1 %}<title>相册-LiveBlog官网-轻奢主义个人博客系统-Powered by Liveblog</title>{% endblock %}
+{% block live2 %}
+<div class="album">
+    <div class="album_title">时光荏苒</div>
+    {% if request.user.id == 1 %}
+        <div class="album_upload">
+            <form method="post" enctype="multipart/form-data">{%csrf_token%}
+                <input type="file" name="file" class="album_upload_input1" multiple="multiple">
+                <input type="submit" value="&#10004" class="album_upload_input2">
+            </form>
+        </div>
+    {% endif %}
+</div>
+
+<div class="album_pic">
+{%  for pic in pic_list %}
+<div class="album_pics"><img src="media/{{ MEDIA_URL }}{{ pic.photos }}"></div>
+{% endfor %}
+</div>
+<div class="album_bottum">
+    <div class="album_bottum_bottum"><a href="albums.html">回忆更多&raquo;</a></div>
+    <div class="home_bottom_bottom"></div>
+</div>
+
+<script type="text/javascript">
+        if ( {{ error }} == 1 ){
+            alert('Liveblog提示：\n\n 您上传的图片格式有问题，请上传jpg,jepg或png格式的照片！');
+        }
+</script>
+
+{% endblock %}

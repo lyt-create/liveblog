@@ -1,0 +1,28 @@
+{#author:lytcreate#}
+{#blog:liveblog#}
+{#website:http://www.liveblog.cn#}
+{#powered by Django#}
+
+{% extends 'base.html' %}
+{% block live1 %}<title>梦途-LiveBlog官网-极简主义个人博客系统-Powered by Liveblog</title>{% endblock %}
+{% block live2 %}
+
+<form method="post" >{% csrf_token %}
+    <input type="text" name="id" value="{{ motus.0 }}" hidden="hidden">
+<div class="wmotus-mb">目标：<input type="text" name="title" value="{{ motus.1 }}"></div>
+<div class="wmotus-yq">愿期：<input type="date" name="time" value="{{ motus.3 }}" required="required"></div>
+<div class="wmotus-nr">内容：<textarea id="motus" name="content">{{ motus.2 }}</textarea></div>
+<div class="wmotus-fb"><button type="submit" class="layui-btn layui-btn-warm">发布</button></div>
+<div class="home_bottom_bottom"></div>
+</form>
+<script>
+    layui.use('layedit', function(){
+    var layedit = layui.layedit;
+
+    layedit.build('motus', {
+        height: 560, //设置编辑器高度
+        tool: ['face']
+});
+});
+</script>
+{% endblock %}

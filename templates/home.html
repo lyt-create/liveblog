@@ -1,0 +1,38 @@
+{#author:lytcreate#}
+{#blog:liveblog#}
+{#website:http://www.liveblog.cn#}
+{#powered by Django#}
+
+{% extends 'base.html' %}
+{% block live1 %}<title>LiveBlog官网-极简主义个人博客系统-Powered by Liveblog</title>{% endblock %}
+
+{% block live2 %}
+<div>
+{% for home in curuent_page %}
+<div class="home_main">
+    <div class="home_title"><a href="daily.html?read={{ home.id }}"><b>{{ home.theme }}</b></a></div>
+    <div class="art_pic">
+        <div class="home_article">{{ home.contents|striptags|truncatechars:200|linebreaks }}</div>
+        <div class="home_pic"><img src="media/{{ MEDIA_URL }}{{ home.image }}"></div>
+    </div>
+    <div class="home_comments">
+        <label>{{ home.publicationdate }}</label>
+        <label>{{ home.viewsnumber }}浏览</label>
+        <label>{{ home.comments }}评论</label>
+        <label>{{ home.likesnumber }}点赞</label>
+    </div>
+</div>
+    {% endfor %}
+<div>
+    {% if curuent_page.has_previous %}
+    <div class="home_bottom_left"><a href="?page={{ curuent_page.previous_page_number }}">上一页</a></div>
+    {% endif %}
+    {% if curuent_page.has_next %}
+    <div class="home_bottom"><a href="?page={{ curuent_page.next_page_number }}">下一页</a></div>
+    {% endif %}
+    </div>
+    <div>.</div>
+    <div class="home_bottom_bottom"></div><br>
+
+</div>
+{% endblock %}
